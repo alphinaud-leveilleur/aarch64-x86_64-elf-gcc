@@ -7,7 +7,7 @@ ARG BINUTILS_VERSION=2.36.1
 ARG GCC_VERSION=10.2.0
 
 # Install build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y  \
     wget \
     build-essential \
     libgmp-dev \
