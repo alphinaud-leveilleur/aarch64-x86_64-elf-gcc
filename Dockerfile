@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y  \
     build-essential \
     libgmp-dev \
     libmpfr-dev \
-    libmpc-dev && \
+    libmpc-dev \
+    nasm && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /tmp
@@ -33,6 +34,14 @@ RUN mkdir binutils-build && cd binutils-build && \
 RUN mkdir gcc-build && cd gcc-build && \
     ../gcc-$GCC_VERSION/configure --target=x86_64-elf --disable-nls --enable-languages=c,c++ --without-headers && \
     make all-gcc && make all-target-libgcc && make install-gcc && make install-target-libgcc && cd .. && rm -rf gcc-build
+
+# Update the system and install grub-mkrescue dependencies
+RUN apt-get update && apt-get install -y \
+    grub-pc-bin \
+    grub-efi-amd64-bin \
+    xorriso \
+    mtools && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /
 
