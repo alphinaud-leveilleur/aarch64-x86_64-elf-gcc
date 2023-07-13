@@ -28,4 +28,5 @@ jobs:
       with:
         context: .
         push: true
+        platforms: linux/arm64
         tags: ghcr.io/akirk1701a/aarch64-x86_64-elf-gcc:latest
