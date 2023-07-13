@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:bullseye
 
 LABEL maintainer="Kirk Parfitt"
 
@@ -37,8 +37,7 @@ RUN mkdir gcc-build && cd gcc-build && \
 
 # Update the system and install grub-mkrescue dependencies
 RUN apt-get update && apt-get install -y \
-    grub-pc-bin \
-    grub-efi-amd64-bin \
+    grub-efi-arm64-bin \
     xorriso \
     mtools && \
     rm -rf /var/lib/apt/lists/*
