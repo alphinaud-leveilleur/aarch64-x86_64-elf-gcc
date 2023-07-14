@@ -35,13 +35,39 @@ RUN mkdir gcc-build && cd gcc-build && \
     ../gcc-$GCC_VERSION/configure --target=x86_64-elf --disable-nls --enable-languages=c,c++ --without-headers && \
     make all-gcc && make all-target-libgcc && make install-gcc && make install-target-libgcc && cd .. && rm -rf gcc-build
 
+# Install additional dependencies for GRUB
+RUN apt-get update && apt-get install -y \
+    grub-common \
+    grub2-common \
+    bison \
+    flex \
+    libdevmapper-dev \
+    liblzma-dev \
+    help2man \
+    python3-dev \
+    autoconf \
+    automake \
+    autotools-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+
+# Download GRUB source
+ARG GRUB_VERSION=2.06
+RUN wget https://ftp.gnu.org/gnu/grub/grub-$GRUB_VERSION.tar.xz && \
+    tar xf grub-$GRUB_VERSION.tar.xz && \
+    rm grub-$GRUB_VERSION.tar.xz
+
+# Build GRUB
+RUN cd grub-$GRUB_VERSION && \
+    ./configure --with-platform=pc --target=x86_64-elf && \
+    make && make install
+RUN ln -s /usr/local/lib/grub/i386-pc /usr/lib/grub/i386-pc
 # Update the system and install grub-mkrescue dependencies
 RUN apt-get update && apt-get install -y \
-    grub-efi-arm64-bin \
     xorriso \
     mtools && \
     rm -rf /var/lib/apt/lists/*
 
-WORKDIR /
+WORKDIR /tmp
 
 CMD ["/bin/bash"]
